@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employees KYC</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            font-size: smaller;
+            margin: 0;
+        }
+
+        .main-content {
+            padding: 10px;
+            margin-top: 65px; /* Adjust to ensure content is not hidden under the navbar */
+        }
+
+        .container {
+            max-width: 1500px;
+            margin: 0 auto;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        h3 {
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #56606a;
+            margin-bottom: 20px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .table th, .table td {
+            padding: 0;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+
+        .table th {
+            background-color: #56606a;
+            color: #fff;
+        }
+
+        .table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .custom-table {
+            margin-top: 5px;
+        }
+
+        .navbar {
+            font-size: 1rem;
+            height: 60px;
+            background-color: #343a40;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .navbar-brand {
+            display: flex;
+            align-items: center;
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .navbar-brand img {
+            margin-right: 10px;
+        }
+
+        .navbar-brand:hover {
+            color: #ddd;
+        }
+
+        .nav-link {
+            color: white;
+            margin-left: auto;
+        }
+
+        .nav-link:hover {
+            color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="https://sangamgroup.com/wp-content/uploads/2023/01/sangam_group_logo.png" alt="Logo" width="60" height="50" />
+                Sangam India Limited
+            </a>
+            <a href="/logout" class="nav-link ml-auto">Logout</a>
+        </div>
+    </nav>
+    <div class="main-content"> 
+        <div class="container">
+            <h3>Employees KYC Details</h3>
+            <table class="table table-bordered table custom-table" id="viewMenu">
+                <thead>
+                    <tr>
+                        <th>Emp. Code</th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Designation</th>
+                        <th>D.O.J</th>
+                        <th>D.O.B</th>
+                        <th>PAN NO.</th>
+                        <th>AADHAR NO.</th>
+                        <th>UAN NO.</th>
+                        <th>REPORTING FIRST</th>
+                        <th>HOD</th>
+                        <th>FATHER NAME</th>
+                        <th>FATHER DOB</th>
+                        <th>MOTHER NAME</th>
+                        <th>MOTHER DOB</th>
+                        <th>SPOUSE NAME</th>
+                        <th>SPOUSE DOB</th>
+                        <th>FATHER-IN-LAW</th>
+                        <th>FATHER-IN-LAW DOB</th>
+                        <th>MOTHER-IN-LAW</th>
+                        <th>MOTHER-IN-LAW DOB</th>
+                        <th>CHILD 1</th>
+                        <th>CHILD 1 DOB</th>
+                        <th>CHILD 2</th>
+                        <th>CHILD 2 DOB</th>
+                        <th>CHILD 3</th>
+                        <th>CHILD 3 DOB</th>
+                        <th>NOMINEE 1</th>
+                        <th>NOMINEE 1 DOB</th>
+                        <th>NOMINEE 2</th>
+                        <th>NOMINEE 2 DOB</th>
+                        <th>REMARKS</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% function formatDate(date) {
+                        return date ? new Date(date).toLocaleDateString('en-GB') : '';
+                    } %>
+                    <% for (user of users){ %>
+                    <tr>
+                        <td><%= user.employee_code %></td>
+                        <td><%= user.name %></td>
+                        <td><%= user.department %></td>
+                        <td><%= user.designation %></td>
+                        <td><%= formatDate(user.date_of_joining) %></td>
+                        <td><%= formatDate(user.date_of_birth) %></td>
+                        <td><%= user.pan_number %></td>
+                        <td><%= user.aadhar_number %></td>
+                        <td><%= user.uan_number %></td>
+                        <td><%= user.reporting_first %></td>
+                        <td><%= user.hod %></td>
+                        <td><%= user.father_name %></td>
+                        <td><%= formatDate(user.father_birthdate) %></td>
+                        <td><%= user.mother_name %></td>
+                        <td><%= formatDate(user.mother_birthdate) %></td>
+                        <td><%= user.spouse_name %></td>
+                        <td><%= formatDate(user.spouse_birthdate) %></td>
+                        <td><%= user.father_inlaw_name %></td>
+                        <td><%= formatDate(user.father_inlaw_birthdate) %></td>
+                        <td><%= user.mother_inlaw_name %></td>
+                        <td><%= formatDate(user.mother_inlaw_birthdate) %></td>
+                        <td><%= user.children_name1 %></td>
+                        <td><%= formatDate(user.children_name1_birthdate) %></td>
+                        <td><%= user.children_name2 %></td>
+                        <td><%= formatDate(user.children_name2_birthdate) %></td>
+                        <td><%= user.children_name3 %></td>
+                        <td><%= formatDate(user.children_name3_birthdate) %></td>
+                        <td><%= user.nominee1 %></td>
+                        <td><%= formatDate(user.nominee1_birthdate) %></td>
+                        <td><%= user.nominee2 %></td>
+                        <td><%= formatDate(user.nominee2_birthdate) %></td>
+                        <td><%= user.remarks %></td>
+                    </tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#viewMenu').DataTable({
+                "paging": true,
+                "searching": true,
+                "ordering": true,
+                "info": true
+            });
+        });
+    </script>
+</body>
+</html>
