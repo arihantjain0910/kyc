@@ -6,6 +6,7 @@
     <title>Employees KYC</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -97,6 +98,20 @@
         .nav-link:hover {
             color: #ddd;
         }
+
+        .download-btn {
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .download-btn:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -112,13 +127,14 @@
     <div class="main-content"> 
         <div class="container">
             <h3>Employees KYC Details</h3>
+            <button class="download-btn" onclick="downloadExcel()">Download Excel</button>
             <table class="table table-bordered table custom-table" id="viewMenu">
                 <thead>
                     <tr>
-                        <th>Emp. Code</th>
-                        <th>Name</th>
-                        <th>Department</th>
-                        <th>Designation</th>
+                        <th>EMP. CODE</th>
+                        <th>NAME</th>
+                        <th>DEPARTMENT</th>
+                        <th>DESIGNATION</th>
                         <th>D.O.J</th>
                         <th>D.O.B</th>
                         <th>PAN NO.</th>
@@ -159,8 +175,8 @@
                         <td><%= user.name %></td>
                         <td><%= user.department %></td>
                         <td><%= user.designation %></td>
-                        <td><%= formatDate(user.date_of_joining) %></td>
-                        <td><%= formatDate(user.date_of_birth) %></td>
+                        <td><%= user.date_of_joining %></td>
+                        <td><%= user.date_of_birth %></td>
                         <td><%= user.pan_number %></td>
                         <td><%= user.aadhar_number %></td>
                         <td><%= user.uan_number %></td>
@@ -205,6 +221,33 @@
                 "info": true
             });
         });
+
+        function downloadExcel() {
+            var table = document.getElementById('viewMenu');
+            var workbook = XLSX.utils.table_to_book(table, {sheet: "Sheet JS"});
+            var ws = workbook.Sheets["Sheet JS"];
+
+            // Specify date format
+            var dateCols = ["E", "F", "M", "O", "Q", "S", "U", "W", "Y", "AA", "AC", "AE"];
+            for (var i = 0; i < dateCols.length; i++) {
+                var col = dateCols[i];
+                for (var row = 2; ws[col + row]; row++) {
+                    ws[col + row].z = 'dd/mm/yyyy';
+                }
+            }
+
+            // Convert numbers to strings for specific columns
+            var numCols = ["G", "H", "I"];
+            for (var i = 0; i < numCols.length; i++) {
+                var col = numCols[i];
+                for (var row = 2; ws[col + row]; row++) {
+                    ws[col + row].t = 's'; // Set cell type to string
+                    ws[col + row].v = ws[col + row].v.toString(); // Convert number to string
+                }
+            }
+
+            XLSX.writeFile(workbook, 'employees_kyc.xlsx');
+        }
     </script>
 </body>
 </html>

@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const ejs = require('ejs');
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise'); // Use promise-based version of mysql2
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const passport = require('passport');
@@ -47,42 +47,41 @@ const pool = mysql.createPool({
 
 // Passport Local Strategy
 passport.use(new LocalStrategy({
-  usernameField: 'employee_code',
-  passwordField: 'password'
-}, (employee_code, password, done) => {
-  pool.query('SELECT * FROM users WHERE employee_code = ?', [employee_code], (err, results) => {
-      if (err) {
-          console.error('Error retrieving user:', err);
-          return done(err);
-      }
-      if (results.length === 0) {
-          return done(null, false, { message: 'Incorrect employee code.' });
-      }
-      const user = results[0];
-      if (user.kyc_submitted) {
-          return done(null, false, { message: 'Your KYC form has already been submitted and you are not allowed to log in.' });
-      }
-      if (password !== user.password) {
-          return done(null, false, { message: 'Incorrect password.' });
-      }
-      console.log('Authenticated user:', user);
-      return done(null, user);
-  });
+    usernameField: 'employee_code',
+    passwordField: 'password'
+}, async (employee_code, password, done) => {
+    try {
+        const [results] = await pool.query('SELECT * FROM users WHERE employee_code = ?', [employee_code]);
+        if (results.length === 0) {
+            return done(null, false, { message: 'Incorrect employee code.' });
+        }
+        const user = results[0];
+        if (user.kyc_submitted) {
+            return done(null, false, { message: 'Your KYC form has already been submitted and you are not allowed to log in.' });
+        }
+        if (password !== user.password) {
+            return done(null, false, { message: 'Incorrect password.' });
+        }
+        console.log('Authenticated user:', user);
+        return done(null, user);
+    } catch (err) {
+        console.error('Error retrieving user:', err);
+        return done(err);
+    }
 }));
-
 
 passport.serializeUser((user, done) => {
     done(null, user.id);
 });
 
-passport.deserializeUser((id, done) => {
-    pool.query('SELECT * FROM users WHERE id = ?', [id], (err, results) => {
-        if (err) {
-            console.error('Error deserializing user:', err);
-            return done(err);
-        }
+passport.deserializeUser(async (id, done) => {
+    try {
+        const [results] = await pool.query('SELECT * FROM users WHERE id = ?', [id]);
         done(null, results[0]);
-    });
+    } catch (err) {
+        console.error('Error deserializing user:', err);
+        done(err);
+    }
 });
 
 // Middleware to check if the user is an admin
@@ -139,105 +138,97 @@ app.get('/employee_kyc_detail', (req, res) => {
     }
 });
 
-app.get('/user-details', (req, res) => {
+app.get('/user-details', async (req, res) => {
     const userId = req.user.id;
-
-    const sql = 'SELECT * FROM users WHERE id = ?';
-    pool.query(sql, [userId], (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: err });
-        }
+    try {
+        const [result] = await pool.query('SELECT * FROM users WHERE id = ?', [userId]);
         if (result.length === 0) {
             return res.status(404).json({ error: 'User not found' });
         }
         res.json(result[0]);
-    });
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
 });
 
-app.post('/submit', (req, res) => {
-  const {
-      employee_code, name, department, designation,
-      date_of_joining, date_of_birth, pan_number, aadhar_number,
-      uan_number, reporting_first, hod,
-      nominee1, nominee1_birthdate, nominee1_percent,
-      nominee2, nominee2_birthdate, nominee2_percent,
-      nominee3, nominee3_birthdate, nominee3_percent,
-      father_name, father_birthdate, mother_name, mother_birthdate,
-      father_inlaw_name, father_inlaw_birthdate, mother_inlaw_name, mother_inlaw_birthdate,
-      spouse_name, spouse_birthdate,
-      children_name1, children_name1_birthdate, children_name2, children_name2_birthdate,
-      children_name3, children_name3_birthdate, children_name4, children_name4_birthdate,
-      children_name5, children_name5_birthdate,
-      remarks
-  } = req.body;
+app.post('/submit', async (req, res) => {
+    const {
+        employee_code, name, department, designation,
+        date_of_joining, date_of_birth, pan_number, aadhar_number,
+        uan_number, reporting_first, hod,
+        nominee1, nominee1_birthdate, nominee1_percent,
+        nominee2, nominee2_birthdate, nominee2_percent,
+        nominee3, nominee3_birthdate, nominee3_percent,
+        father_name, father_birthdate, mother_name, mother_birthdate,
+        father_inlaw_name, father_inlaw_birthdate, mother_inlaw_name, mother_inlaw_birthdate,
+        spouse_name, spouse_birthdate,
+        children_name1, children_name1_birthdate, children_name2, children_name2_birthdate,
+        children_name3, children_name3_birthdate, children_name4, children_name4_birthdate,
+        children_name5, children_name5_birthdate,
+        remarks
+    } = req.body;
 
-  const replaceEmptyWithNull = (value) => (value === '' ? null : value);
+    const replaceEmptyWithNull = (value) => (value === '' ? null : value);
 
-  const values = [
-      employee_code, name, department, designation,
-      date_of_joining, date_of_birth, pan_number, aadhar_number,
-      uan_number, reporting_first, hod,
-      nominee1, replaceEmptyWithNull(nominee1_birthdate), replaceEmptyWithNull(nominee1_percent),
-      nominee2, replaceEmptyWithNull(nominee2_birthdate), replaceEmptyWithNull(nominee2_percent),
-      nominee3, replaceEmptyWithNull(nominee3_birthdate), replaceEmptyWithNull(nominee3_percent),
-      father_name, replaceEmptyWithNull(father_birthdate), mother_name, replaceEmptyWithNull(mother_birthdate),
-      father_inlaw_name, replaceEmptyWithNull(father_inlaw_birthdate), mother_inlaw_name, replaceEmptyWithNull(mother_inlaw_birthdate),
-      spouse_name, replaceEmptyWithNull(spouse_birthdate),
-      children_name1, replaceEmptyWithNull(children_name1_birthdate), children_name2, replaceEmptyWithNull(children_name2_birthdate),
-      children_name3, replaceEmptyWithNull(children_name3_birthdate), children_name4, replaceEmptyWithNull(children_name4_birthdate),
-      children_name5, replaceEmptyWithNull(children_name5_birthdate),
-      remarks
-  ];
+    const values = [
+        employee_code, name, department, designation,
+        date_of_joining, date_of_birth, pan_number, aadhar_number,
+        uan_number, reporting_first, hod,
+        nominee1, replaceEmptyWithNull(nominee1_birthdate), replaceEmptyWithNull(nominee1_percent),
+        nominee2, replaceEmptyWithNull(nominee2_birthdate), replaceEmptyWithNull(nominee2_percent),
+        nominee3, replaceEmptyWithNull(nominee3_birthdate), replaceEmptyWithNull(nominee3_percent),
+        father_name, replaceEmptyWithNull(father_birthdate), mother_name, replaceEmptyWithNull(mother_birthdate),
+        father_inlaw_name, replaceEmptyWithNull(father_inlaw_birthdate), mother_inlaw_name, replaceEmptyWithNull(mother_inlaw_birthdate),
+        spouse_name, replaceEmptyWithNull(spouse_birthdate),
+        children_name1, replaceEmptyWithNull(children_name1_birthdate), children_name2, replaceEmptyWithNull(children_name2_birthdate),
+        children_name3, replaceEmptyWithNull(children_name3_birthdate), children_name4, replaceEmptyWithNull(children_name4_birthdate),
+        children_name5, replaceEmptyWithNull(children_name5_birthdate),
+        remarks
+    ];
 
-  const query = `
-      INSERT INTO employee_kyc (
-          employee_code, name, department, designation,
-          date_of_joining, date_of_birth, pan_number, aadhar_number,
-          uan_number, reporting_first, hod,
-          nominee1, nominee1_birthdate, nominee1_percent,
-          nominee2, nominee2_birthdate, nominee2_percent,
-          nominee3, nominee3_birthdate, nominee3_percent,
-          father_name, father_birthdate, mother_name, mother_birthdate,
-          father_inlaw_name, father_inlaw_birthdate, mother_inlaw_name, mother_inlaw_birthdate,
-          spouse_name, spouse_birthdate,
-          children_name1, children_name1_birthdate, children_name2, children_name2_birthdate,
-          children_name3, children_name3_birthdate, children_name4, children_name4_birthdate,
-          children_name5, children_name5_birthdate,
-          remarks
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?)
-  `;
+    const query = `
+        INSERT INTO employee_kyc (
+            employee_code, name, department, designation,
+            date_of_joining, date_of_birth, pan_number, aadhar_number,
+            uan_number, reporting_first, hod,
+            nominee1, nominee1_birthdate, nominee1_percent,
+            nominee2, nominee2_birthdate, nominee2_percent,
+            nominee3, nominee3_birthdate, nominee3_percent,
+            father_name, father_birthdate, mother_name, mother_birthdate,
+            father_inlaw_name, father_inlaw_birthdate, mother_inlaw_name, mother_inlaw_birthdate,
+            spouse_name, spouse_birthdate,
+            children_name1, children_name1_birthdate, children_name2, children_name2_birthdate,
+            children_name3, children_name3_birthdate, children_name4, children_name4_birthdate,
+            children_name5, children_name5_birthdate,
+            remarks
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?)
+    `;
 
-  pool.query(query, values, (err, result) => {
-      if (err) {
-          return res.status(500).json({ error: err });
-      }
-      
-      // Update the user's KYC status
-      const updateQuery = 'UPDATE users SET kyc_submitted = TRUE WHERE employee_code = ?';
-      pool.query(updateQuery, [employee_code], (err, result) => {
-          if (err) {
-              console.error('Error updating KYC status:', err);
-              return res.status(500).json({ error: err });
-          }
-          res.redirect('/login');
-      });
-  });
+    try {
+        await pool.query(query, values);
+        
+        // Update the user's KYC status
+        const updateQuery = 'UPDATE users SET kyc_submitted = TRUE WHERE employee_code = ?';
+        await pool.query(updateQuery, [employee_code]);
+        res.redirect('/thank-you.ejs');
+    } catch (err) {
+        console.error('Error updating KYC status:', err);
+        res.status(500).json({ error: err });
+    }
 });
 
-
-app.get('/admin-dashboard', isAdmin, (req, res) => {
-    const sql = 'SELECT * FROM employee_kyc';
-
-    pool.query(sql, (err, results) => {
-        if (err) {
-            console.error('Error retrieving data from database:', err);
-            return res.status(500).send('Internal Server Error');
-        }
+app.get('/admin-dashboard', isAdmin, async (req, res) => {
+    try {
+        const [results] = await pool.query('SELECT * FROM employee_kyc');
         res.render('admin-dashboard', { users: results });
-    });
+    } catch (err) {
+        console.error('Error retrieving data from database:', err);
+        res.status(500).send('Internal Server Error');
+    }
 });
 
-// Start the server
-app.listen(5000, () => {
-    console.log('Server is running on http://localhost:5000');
+// Start server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
