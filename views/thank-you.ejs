@@ -5,11 +5,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thank You</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    
+        <style>
+        body{
+            background:rgb(224, 224, 224);
+        }
+        label {
+            font-weight: bold;
+        }
+        .required::after {
+            content: " *";
+            color: red;
+        }
+        .navbar {
+            font-size: 1rem;
+            height: 55px; /* Adjust based on the height of your navbar */
+        }
+        .main-content {
+            margin-left: 10px;
+            padding: 100px 10px 10px;
+        }
+        body {
+            font-size: 0.7rem;
+           
+        }
+        .card-header {
+            font-weight: bold;
+            font-style: italic;
+            text-decoration: underline;
+        }
+        .small-input {
+            /* width: 100px; Adjust the width as needed */
+            height: 30px; /* Adjust the height as needed */
+            padding: 0.2rem; /* Adjust the padding as needed */
+            font-size: 12px;
+        }
+        .accordion-button{
+            font-weight:600;
+        }
+        
+    </style>
+    
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="">
+                <img
+                    src="https://sangamgroup.com/wp-content/uploads/2023/01/sangam_group_logo.png"
+                    alt="Logo"
+                    width="50"
+                    height="43"
+                />
+                Sangam India Limited
+            </a>
+            <a href="/logout" class="nav-link" style="color: white;">Logout</a>
+        </div>
+    </nav>
+    <div class="main-content">
     <div class="container mt-5">
         <h2 class="text-center">Thank You for Submitting the Form</h2>
         <p class="text-center">You have successfully submitted your KYC form. You cannot log in again.</p>
     </div>
+</div>
+<script>
+    
+// Prevent users from going back to the form page
+history.pushState(null, null, location.href);
+window.onpopstate = function () {
+    history.go(1);
+};
+</script>
 </body>
 </html>

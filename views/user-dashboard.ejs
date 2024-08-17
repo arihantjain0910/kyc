@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee KYC Form</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <style>
+        body{
+            background:rgb(224, 224, 224);
+        }
+        label {
+            font-weight: bold;
+        }
+        .required::after {
+            content: " *";
+            color: red;
+        }
+        .navbar {
+            font-size: 1rem;
+            height: 55px; /* Adjust based on the height of your navbar */
+        }
+        .main-content {
+            margin-left: 10px;
+            padding: 10px 10px 10px;
+        }
+        body {
+            font-size: 0.7rem;
+           
+        }
+        .card-header {
+            font-weight: bold;
+            font-style: italic;
+            text-decoration: underline;
+        }
+        .small-input {
+            /* width: 100px; Adjust the width as needed */
+            height: 30px; /* Adjust the height as needed */
+            padding: 0.2rem; /* Adjust the padding as needed */
+            font-size: 12px;
+        }
+        .accordion-button{
+            font-weight:600;
+        }
+        
+        
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="">
+                <img
+                    src="https://sangamgroup.com/wp-content/uploads/2023/01/sangam_group_logo.png"
+                    alt="Logo"
+                    width="50"
+                    height="43"
+                />
+                Sangam India Limited
+            </a>
+            <a href="/logout" class="nav-link" style="color: white;">Logout</a>
+        </div>
+    </nav>
+    <% function formatDate(date) {
+        return date ? new Date(date).toLocaleDateString('en-GB') : '';
+    } %>
+    <div class="main-content">
+        <div class="container mt-5">
+            <h6 style="text-align: center;">Welcome <%= user.name %>, You Have Already Filled The Form </h6>
+            <h5 class="text-center" style="font-weight: bold; font-style: italic;">Employee KYC Form</h5    >
+            <form id="kycForm" action="/user-dashboard" method="get">
+                <div class="card mb-3">
+                    <div class="card-header">Employee Details</div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-1">
+                                <label for="employee_code" class="required">Emp. Id:</label>
+                                <input type="text" class="form-control small-input" id="employee_code" name="employee_code" value="<%= user.employee_code %>" required readonly>
+                            </div>
+                            
+                            <div class="form-group col-md-2">
+                                <label for="name" class="required">Name:</label>
+                                <input type="text" class="form-control small-input" id="name" name="name" required value="<%= user.name %>"readonly>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="department" class="required">Department:</label>
+                                <input type="text" class="form-control small-input" id="department" name="department" value="<%= user.department %>"required readonly>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="designation" class="required">Designation:</label>
+                                <input type="text" class="form-control small-input" id="designation" name="designation" 
+                                value="<%= user.designation %>"required readonly>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label for="date_of_joining" class="required">D.O.J:</label>
+                                <input type="text" class="form-control small-input" id="date_of_joining" value="<%= user.date_of_joining %>" name="date_of_joining" required readonly>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label for="date_of_birth" class="required">D.O.B:</label>
+                                <input type="text" class="form-control small-input" id="date_of_birth" name="date_of_birth" value="<%= user.date_of_birth %>" required readonly>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label for="pan_number" class="required">PAN No.:</label>
+                                <input type="text" class="form-control small-input" id="pan_number" name="pan_number" value="<%= user.pan_number %>"required readonly>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="aadhar_number" class="required">Aadhar No.:</label>
+                                <input type="text" class="form-control small-input" id="aadhar_number" name="aadhar_number" value="<%= user.aadhar_number %>" required readonly>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            
+                            
+                            <div class="form-group col-md-2">
+                                <label for="uan_number" class="required">UAN No.:</label>
+                                <input type="text" class="form-control small-input" id="uan_number" name="uan_number"  value="<%= user.uan_number %>"required readonly>
+                            </div>
+                            <div class="form-group col-md-1">
+                                <label for="band" class="required">Band:</label>
+                                <input type="text" class="form-control small-input" id="band" name="band" value="<%= user.band %>" required readonly>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="plant" class="required">Plant/Location:</label>
+                                <input type="text" class="form-control small-input" id="plant" name="plant" value="<%= user.plant %>" required readonly>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="education" class="required">Education/Qualification:</label>
+                                <input type="text" class="form-control small-input" id="education" name="education" value="<%= user.education %>" required readonly>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="reporting_first" class="required">Reporting First:</label>
+                                <input type="text" class="form-control small-input" id="reporting_first" name="reporting_first" value="<%= user.reporting_first %>" required readonly>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <label for="hod" class="required">HOD:</label>
+                                <input type="text" class="form-control small-input" id="hod" name="hod" value="<%= user.hod %>" required readonly>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        Required Details From Employee (Please Enter The Correct Information)
+                    </div>
+                    <div class="card-body">
+                        <div class="accordion  accordion-flush" id="accordionExample">
+                            <div class="accordion-item">
+                              <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                 Personal Information 
+                                </button>
+                              </h2>
+                              <div id="collapseOne" class="accordion-collapse collapse " data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                  <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="permanent_address" class="required">Permanent Address:</label>
+                                        <input type="text" class="form-control small-input" id="permanent_address" name="permanent_address" value="<%= user.permanent_address %>" maxlength="200" required readonly>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="temporary_address" class="required">Temporary Address:</label>
+                                        <input type="text" class="form-control small-input" id="temporary_address" name="temporary_address" value="<%= user.temporary_address %>" maxlength="200" required readonly>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <label for="title_nominee1" class="required" >Title:</label>
+                                        <input class="form-control small-input" id="title_nominee1"  value="<%= user.title_nominee1 %>" name="title_nominee1" required readonly> 
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="nominee1" class="required">Nominee 1:</label>
+                                        <input type="text" class="form-control small-input" id="nominee1" name="nominee1" maxlength="40" value="<%= user.nominee1 %>" required readonly>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="nominee1_birthdate" class="required">Nominee 1 DOB:</label>
+                                        <input type="text" class="form-control small-input" id="nominee1_birthdate" name="nominee1_birthdate" value="<%= formatDate(user.nominee1_birthdate) %>" required readonly>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <label for="title_nominee2" class="" >Title:</label>
+                                        <input class="form-control small-input" id="title_nominee2" value="<%= user.title_nominee2 %>"name="title_nominee2" readonly >
+                                            
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="nominee2">Nominee 2:</label>
+                                        <input type="text" class="form-control small-input" id="nominee2" name="nominee2" value="<%= user.nominee2 %>" maxlength="40" readonly>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="nominee2_birthdate">Nominee 2 Birthdate:</label>
+                                        <input type="text" class="form-control small-input" id="nominee2_birthdate" value="<%= formatDate(user.nominee2_birthdate) %>"name="nominee2_birthdate" readonly>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="remarks">Remarks:</label>
+                                        <input class="form-control small-input" id="remarks" name="remarks" placeholder="Changes in Employee Details Section" value="<%= user.remarks %>" maxlength="100" readonly>
+                                        
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="accordion-item">
+                              <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                  Family Information
+                                </button>
+                              </h2>
+                              <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                  <div class="form-row">
+                                    <div class="form-group col-md-1">
+                                        <label for="title_father" class="required">Title:</label>
+                                        <input class="form-control small-input" id="title_father" name="title_father"  value="<%= user.title_father %>"required readonly>
+                                           
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="father_name" class="required">Father Name:</label>
+                                        <input type="text" class="form-control small-input" id="father_name" value="<%= user.father_name %>"name="father_name" maxlength="40" required readonly>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="father_birthdate" class="required">Father DOB:</label>
+                                        <input type="text" class="form-control small-input" id="father_birthdate" value="<%= formatDate(user.father_birthdate) %>"name="father_birthdate" required readonly>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <label for="title_mother" class="required">Title:</label>
+                                        <input class="form-control small-input" id="title_mother" name="title_mother" value="<%= user.title_mother %>" required readonly>
+                                           
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="mother_name" class="required">Mother Name:</label>
+                                        <input type="text" class="form-control small-input" id="mother_name" name="mother_name" maxlength="40" value="<%= user.mother_name %>" required readonly>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="mother_birthdate" class="required">Mother DOB:</label>
+                                        <input type="text" class="form-control small-input" id="mother_birthdate" name="mother_birthdate" value="<%= formatDate(user.mother_birthdate) %>" required readonly>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <label for="title_spouse" >Title:</label>
+                                        <input class="form-control small-input" id="title_spouse" value="<%= user.title_spouse %>"name="title_spouse" readonly>
+                                           
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="spouse_name">Spouse Name:</label>
+                                        <input type="text" class="form-control small-input" id="spouse_name" name="spouse_name" value="<%= user.spouse_name %>" maxlength="40" readonly> 
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="spouse_birthdate">Spouse DOB:</label>
+                                        <input type="text" class="form-control small-input" id="spouse_birthdate" value="<%= formatDate(user.spouse_birthdate) %>"name="spouse_birthdate" readonly>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <label for="title_fil" >Title:</label>
+                                        <input class="form-control small-input" id="title_fil" value="<%= user.title_fil %>"name="title_fil" readonly>
+                                         
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="father_inlaw_name">Father-in-law Name:</label>
+                                        <input type="text" class="form-control small-input" id="father_inlaw_name" name="father_inlaw_name" value="<%= user.father_inlaw_name %>" maxlength="40" readonly>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="father_inlaw_birthdate">F-in-law DOB:</label>
+                                        <input type="text" class="form-control small-input" id="father_inlaw_birthdate" name="father_inlaw_birthdate" value="<%= formatDate(user.father_inlaw_birthdate) %>" readonly>
+                                    </div>
+                                    <div class="form-group col-md-1">
+                                        <label for="title_mil" >Title:</label>
+                                        <input class="form-control small-input" id="title_mil" name="title_mil" value="<%= user.title_mil %>" readonly>
+                                            
+                                    </div> 
+                                    <div class="form-group col-md-3">
+                                        <label for="mother_inlaw_name">Mother-in-law Name:</label>
+                                        <input type="text" class="form-control small-input" id="mother_inlaw_name" name="mother_inlaw_name" value="<%= user.mother_inlaw_name %>" maxlength="40" readonly>
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="mother_inlaw_birthdate">M-in-law DOB:</label>
+                                        <input type="text" class="form-control small-input" id="mother_inlaw_birthdate" name="mother_inlaw_birthdate" value="<%= formatDate(user.mother_inlaw_birthdate) %>" readonly>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="children_name1">Child 1 Name:</label>
+                                        <input type="text" class="form-control small-input" id="children_name1" name="children_name1" maxlength="40" value="<%= user.children_name1 %>" readonly>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="children_name1_birthdate">Child1 DOB:</label>
+                                        <input type="text" class="form-control small-input" id="children_name1_birthdate" name="children_name1_birthdate" value="<%= formatDate(user.children_name1_birthdate) %>" readonly>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="children_name2">Child 2 Name:</label>
+                                        <input type="text" class="form-control small-input" id="children_name2" name="children_name2" value="<%= user.children_name2 %>" maxlength="40" readonly>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="children_name2_birthdate">Child2 DOB:</label>
+                                        <input type="text" class="form-control small-input" id="children_name2_birthdate" name="children_name2_birthdate" value="<%= formatDate(user.children_name2_birthdate) %>" readonly>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="children_name3">Child 3 Name:</label>
+                                        <input type="text" class="form-control small-input" id="children_name3" name="children_name3" value="<%= user.children_name3 %>" maxlength="40" readonly> 
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="children_name3_birthdate">Child3 DOB:</label>
+                                        <input type="text" class="form-control small-input" id="children_name3_birthdate" name="children_name3_birthdate" value="<%= formatDate(user.children_name3_birthdate) %>" readonly>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="children_name4">Child 4 Name:</label>
+                                        <input type="text" class="form-control small-input" id="children_name4" name="children_name4" maxlength="40" value="<%= user.children_name4 %>" readonly>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="children_name4_birthdate">Child4 DOB:</label>
+                                        <input type="text" class="form-control small-input" id="children_name4_birthdate" name="children_name4_birthdate" value="<%= formatDate(user.children_name4_birthdate) %>" readonly>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          
+                          </div>
+                        
+                    
+                  </div>
+            </div>
+            <!-- <button type="submit" class="btn btn-primary mt-2">Submit</button> -->
+            </form>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+  
+</body>
+</html>

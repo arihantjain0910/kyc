@@ -140,12 +140,20 @@
                         <th>PAN NO.</th>
                         <th>AADHAR NO.</th>
                         <th>UAN NO.</th>
+                        <th>BAND</th>
+                        <th>PLANT</th>
+                        <th>EDUCATION</th>
                         <th>REPORTING FIRST</th>
                         <th>HOD</th>
+                        <th>PERMANENT ADDRESS</th>
+                        <th>TEMPORARY ADDRESS</th>
+                        <th>TITLE</th>
                         <th>FATHER NAME</th>
                         <th>FATHER DOB</th>
+                        <th>TITLE</th>
                         <th>MOTHER NAME</th>
                         <th>MOTHER DOB</th>
+                        <th>TITLE</th>
                         <th>SPOUSE NAME</th>
                         <th>SPOUSE DOB</th>
                         <th>FATHER-IN-LAW</th>
@@ -158,6 +166,8 @@
                         <th>CHILD 2 DOB</th>
                         <th>CHILD 3</th>
                         <th>CHILD 3 DOB</th>
+                        <th>CHILD 4</th>
+                        <th>CHILD 4 DOB</th>
                         <th>NOMINEE 1</th>
                         <th>NOMINEE 1 DOB</th>
                         <th>NOMINEE 2</th>
@@ -180,12 +190,20 @@
                         <td><%= user.pan_number %></td>
                         <td><%= user.aadhar_number %></td>
                         <td><%= user.uan_number %></td>
+                        <td><%= user.band %></td>
+                        <td><%= user.plant %></td>
+                        <td><%= user.education %></td>
                         <td><%= user.reporting_first %></td>
                         <td><%= user.hod %></td>
+                        <td><%= user.permanent_address %></td>
+                        <td><%= user.temporary_address %></td>
+                        <td><%= user.title_father %></td>
                         <td><%= user.father_name %></td>
                         <td><%= formatDate(user.father_birthdate) %></td>
+                        <td><%= user.title_mother %></td>
                         <td><%= user.mother_name %></td>
                         <td><%= formatDate(user.mother_birthdate) %></td>
+                        <td><%= user.title_spouse %></td>
                         <td><%= user.spouse_name %></td>
                         <td><%= formatDate(user.spouse_birthdate) %></td>
                         <td><%= user.father_inlaw_name %></td>
@@ -198,6 +216,8 @@
                         <td><%= formatDate(user.children_name2_birthdate) %></td>
                         <td><%= user.children_name3 %></td>
                         <td><%= formatDate(user.children_name3_birthdate) %></td>
+                        <td><%= user.children_name4 %></td>
+                        <td><%= formatDate(user.children_name4_birthdate) %></td>
                         <td><%= user.nominee1 %></td>
                         <td><%= formatDate(user.nominee1_birthdate) %></td>
                         <td><%= user.nominee2 %></td>
