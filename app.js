@@ -187,8 +187,8 @@ app.post('/submit', async (req, res) => {
         father_name, father_birthdate,title_mother, mother_name, mother_birthdate,title_fil,
         father_inlaw_name, father_inlaw_birthdate,title_mil, mother_inlaw_name, mother_inlaw_birthdate,title_spouse,
         spouse_name, spouse_birthdate,
-        children_name1, children_name1_birthdate, children_name2, children_name2_birthdate,
-        children_name3, children_name3_birthdate, children_name4, children_name4_birthdate,
+        title_child1,children_name1, children_name1_birthdate,title_child2, children_name2, children_name2_birthdate,
+        title_child3, children_name3, children_name3_birthdate,title_child4, children_name4, children_name4_birthdate,
         children_name5, children_name5_birthdate,
         remarks
     } = req.body;
@@ -205,8 +205,8 @@ app.post('/submit', async (req, res) => {
         father_name, replaceEmptyWithNull(father_birthdate),title_mother, mother_name, replaceEmptyWithNull(mother_birthdate),title_fil,
         father_inlaw_name, replaceEmptyWithNull(father_inlaw_birthdate),title_mil, mother_inlaw_name, replaceEmptyWithNull(mother_inlaw_birthdate),title_spouse,
         spouse_name, replaceEmptyWithNull(spouse_birthdate),
-        children_name1, replaceEmptyWithNull(children_name1_birthdate), children_name2, replaceEmptyWithNull(children_name2_birthdate),
-        children_name3, replaceEmptyWithNull(children_name3_birthdate), children_name4, replaceEmptyWithNull(children_name4_birthdate),
+        title_child1,children_name1, replaceEmptyWithNull(children_name1_birthdate),title_child2, children_name2, replaceEmptyWithNull(children_name2_birthdate),
+        title_child3,children_name3, replaceEmptyWithNull(children_name3_birthdate),title_child4, children_name4, replaceEmptyWithNull(children_name4_birthdate),
         children_name5, replaceEmptyWithNull(children_name5_birthdate),
         remarks
     ];
@@ -222,11 +222,11 @@ app.post('/submit', async (req, res) => {
         father_name, father_birthdate, title_mother, mother_name, mother_birthdate, title_fil,
         father_inlaw_name, father_inlaw_birthdate, title_mil, mother_inlaw_name, mother_inlaw_birthdate, title_spouse,
         spouse_name, spouse_birthdate,
-        children_name1, children_name1_birthdate, children_name2, children_name2_birthdate,
-        children_name3, children_name3_birthdate, children_name4, children_name4_birthdate,
+        title_child1,children_name1, children_name1_birthdate,title_child2, children_name2, children_name2_birthdate,
+        title_child3,children_name3, children_name3_birthdate,title_child4, children_name4, children_name4_birthdate,
         children_name5, children_name5_birthdate,
         remarks
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
 `;
 
 
