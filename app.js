@@ -29,6 +29,7 @@ app.use((req, res, next) => {
 });
 app.use(passport.initialize());
 app.use(passport.session());
+app.use('/bootstrap', express.static(path.join(__dirname, 'node_modules/bootstrap/dist')));
 
 
 
@@ -190,7 +191,7 @@ app.post('/submit', async (req, res) => {
         title_child1,children_name1, children_name1_birthdate,title_child2, children_name2, children_name2_birthdate,
         title_child3, children_name3, children_name3_birthdate,title_child4, children_name4, children_name4_birthdate,
         children_name5, children_name5_birthdate,
-        remarks
+        remarks,self_insurance,father_insurance,mother_insurance,fil_insurance,mil_insurance,child1_insurance,child2_insurance,child3_insurance,child4_insurance,spouse_insurance
     } = req.body;
 
     const replaceEmptyWithNull = (value) => (value === '' ? null : value);
@@ -208,7 +209,7 @@ app.post('/submit', async (req, res) => {
         title_child1,children_name1, replaceEmptyWithNull(children_name1_birthdate),title_child2, children_name2, replaceEmptyWithNull(children_name2_birthdate),
         title_child3,children_name3, replaceEmptyWithNull(children_name3_birthdate),title_child4, children_name4, replaceEmptyWithNull(children_name4_birthdate),
         children_name5, replaceEmptyWithNull(children_name5_birthdate),
-        remarks
+        remarks,self_insurance,father_insurance,mother_insurance,fil_insurance,mil_insurance,child1_insurance,child2_insurance,child3_insurance,child4_insurance,spouse_insurance
     ];
 
     const query = `
@@ -225,8 +226,8 @@ app.post('/submit', async (req, res) => {
         title_child1,children_name1, children_name1_birthdate,title_child2, children_name2, children_name2_birthdate,
         title_child3,children_name3, children_name3_birthdate,title_child4, children_name4, children_name4_birthdate,
         children_name5, children_name5_birthdate,
-        remarks
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        remarks,self_insurance,father_insurance,mother_insurance,fil_insurance,mil_insurance,child1_insurance,child2_insurance,child3_insurance,child4_insurance,spouse_insurance
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 `;
 
 
